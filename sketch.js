@@ -63,7 +63,10 @@ const FRAME_W = 32,
 const MAP_START_Y = VIEWH - TILE_H * 4;
 
 // gravity
-const GRAVITY = 10;
+let gravity = 10;
+let moonGravity = false;
+let doubleJump = false;
+let airJumpUsed = false;
 
 function preload() {
   // --- IMAGES ---
@@ -86,7 +89,7 @@ function setup() {
   // needed to correct an visual artifacts from attempted antialiasing
   allSprites.pixelPerfect = true;
 
-  world.gravity.y = GRAVITY;
+  world.gravity.y = gravity;
 
   // Try to start background music immediately.
   if (musicSfx) musicSfx.setLoop(true);
@@ -135,6 +138,16 @@ function setup() {
   sensorJoint.visible = false;
 }
 
+function toggleMoonGravity() {
+  moonGravity = !moonGravity;
+  gravity = moonGravity ? 10 / 6 : 10;
+  world.gravity.y = gravity;
+}
+
+function toggleDoubleJump() {
+  doubleJump = !doubleJump;
+}
+
 function startMusicIfNeeded() {
   if (musicStarted || !musicSfx) return;
 
@@ -154,6 +167,12 @@ function startMusicIfNeeded() {
 
 function keyPressed() {
   startMusicIfNeeded();
+  if (key === "m" || key === "M") {
+    toggleMoonGravity();
+  }
+  if (key === "r" || key === "R") {
+    toggleDoubleJump();
+  }
 }
 
 function mousePressed() {
@@ -172,9 +191,21 @@ function draw() {
   image(bgImg, 0, 0, bgImg.width, bgImg.height);
   camera.on();
 
+  // --- DEBUG SCREEN ---
+  fill(0, 150);
+  rect(0, 0, 140, 75, 15);
+  fill(255);
+  textSize(12);
+  textAlign(LEFT, TOP);
+  text("Moon Gravity: " + (moonGravity ? "ON" : "OFF"), 10, 10);
+  text("Press M to toggle", 10, 25);
+  text("Double Jump: " + (doubleJump ? "ON" : "OFF"), 10, 40);
+  text("Press R to toggle", 10, 55);
+
   // --- PLAYER CONTROLS ---
   // first check to see if the player is on the ground
   let grounded = sensor.overlapping(ground);
+  if (grounded) airJumpUsed = false;
 
   // -- ATTACK INPUT --
   if (grounded && !attacking && kb.presses("space")) {
@@ -187,9 +218,11 @@ function draw() {
   }
 
   // -- JUMP --
-  if (grounded && kb.presses("up")) {
+  let canJump = grounded || (doubleJump && !airJumpUsed);
+  if (canJump && kb.presses("up")) {
     player.vel.y = -4;
     if (jumpSfx) jumpSfx.play();
+    if (!grounded) airJumpUsed = true;
   }
 
   // --- STATE MACHINE ---
@@ -221,4 +254,5 @@ function draw() {
 
   // --- KEEP IN VIEW ---
   player.pos.x = constrain(player.pos.x, FRAME_W / 2, VIEWW - FRAME_W / 2);
+  player.pos.y = constrain(player.pos.y, FRAME_H / 2, VIEWH - FRAME_H / 2);
 }
