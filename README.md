@@ -1,6 +1,6 @@
 ## Project Title
 
-Side Quest Week 4: Blob Platformer (JSON + Classes)
+Side Quest Week 9: Debug Fox Game
 
 ---
 
@@ -12,8 +12,7 @@ Kayan Baig, k2baig, 21090427
 
 ## Description
 
-This matches the structure of the original blob sketch from Week 2 but moves
-details into classes. I used a for loop to add a "level" label at the top of the blob game.
+This is a continuation of the Fox Game. I added a debug screen that states gravity can be toggled on an off as well as a double feature with can be toggles on and off. Both can be toggled by pressing their respective keys.
 
 ---
 
@@ -21,9 +20,9 @@ details into classes. I used a for loop to add a "level" label at the top of the
 
 Learning Goals:
 
-- Reviewing the use of loops (in this case 'for')
-- Reviewing defining a varibale within a loop
-- Using a designated varibale as a holder for another variable (instead of writing a speific word in 'text' I defined a variable known as 'word' and put that as the text holder)
+- How to add a debug feature
+- Think and apply another feature that is relevant in a game
+- Adding constraints
 
 ---
 
@@ -35,6 +34,6 @@ N/A
 
 ## GenAI
 
-GenAI was used in this side quest to help creating the for loop. With that being said, I understand the functionalities of loops and just needed confirmation on how to write a working loop.
+GenAI was used in this side quest to help creating the debug screen and features. It was also used to fix errors from outputs.
 
 ---
